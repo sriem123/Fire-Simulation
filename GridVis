@@ -1,0 +1,49 @@
+import processing.core.PApplet;
+/**
+ * Graphics for the simulation
+ *
+ * @author Joel Hollingsworth & Sonith Riem
+ */
+public class GridVis {
+
+    private PApplet pApplet;
+
+    private int[][] color = {
+            {0,0,0},      //black
+            {0,255,0},    //green
+            {255,0,0},    //red
+            {0,0,255},    //blue
+            {255,204,0},  //yellow
+            {255,255,255} //white
+    };
+
+    public final int BLACK = 0;
+    public final int GREEN = 1;
+    public final int RED = 2;
+    public final int BLUE = 3;
+    public final int YELLOW = 4;
+    public final int WHITE = 5;
+
+    public GridVis(PApplet pApplet){
+        this.pApplet = pApplet;
+    }
+
+    //row first, column second
+    public void draw(int [][] grid) {
+        int width = pApplet.width / grid[0].length;
+        int height = pApplet.height / grid.length;
+
+        pApplet.noStroke();
+
+        // i = row; j = column
+        for (int i = 0; i < grid.length;i++){
+            for (int j = 0; j < grid[i].length; j++){
+                pApplet.fill(color[grid[i][j]][0],
+                        color[grid[i][j]][1],
+                        color[grid[i][j]][2]);
+                pApplet.rect(j * width,i * height, width, height);
+            }
+        }
+    }
+
+}
