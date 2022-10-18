@@ -1,0 +1,46 @@
+import processing.core.PApplet;
+
+/**
+ * Main for the Fire Simulation
+ *
+ * @author Joel Hollingsworth & Sonith Riem
+ */
+
+public class Main extends PApplet {
+    public static void main(String[] args){
+        PApplet.main(new String [] {Main.class.getName()});
+    }
+
+    private GridVis gridVis;
+    private FireSim fireSim;
+
+
+    @Override
+    public void settings(){
+        size(600,600);
+
+        gridVis = new GridVis(this);
+        fireSim = new FireSim("forest_1.txt",Math.random());
+        System.out.println(fireSim);
+
+        //test for one step
+        fireSim.oneStep();
+        System.out.println(fireSim);
+
+    }
+
+    @Override
+    public void setup(){
+        // can be settings or setup
+
+    }
+
+    @Override
+    public void draw(){
+        // draw the 'forest'
+        gridVis.draw(fireSim.getGrid());
+    }
+
+
+
+}
