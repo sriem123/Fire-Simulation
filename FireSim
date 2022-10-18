@@ -1,0 +1,108 @@
+import javax.swing.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+/**
+ * Execute fire simulation
+ *
+ * @author Joel Hollingsworth & Sonith Riem
+ */
+public class FireSim {
+    public final int EMPTY = 0;
+    public final int TREE = 1;
+    public final int BURNING = 2;
+
+    private int[][] grid;
+    private int[][] newForest;
+    private double  probCatchN;
+
+
+    // n = row
+    // m = col
+
+    public FireSim(String fileName, double probCatch) {
+        File file = new File(fileName);
+        Scanner sc = null;
+
+        try {
+            sc = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            System.out.println(fileName + " is invalid.");
+
+            System.exit(0);
+        }
+        // read n , m
+        int n = sc.nextInt();
+        int m = sc.nextInt();
+
+        grid = new int[n + 2][m + 2];
+
+        newForest = new int[n + 2][m + 2];
+        for (int r = 1; r < grid.length - 1; r++) {
+            for (int c = 1; c < grid[r].length - 1; c++) {
+                grid[r][c] = sc.nextInt();
+            }
+        }
+        //System.out.println(grid);
+        probCatchN = probCatch;
+    }
+
+    public int spread( int site, int north, int east, int west, int south) {
+        // if site is empty, return empty
+        if (site == EMPTY) {
+            return EMPTY;
+        }
+
+        // if site is burning return empty
+        if (site == BURNING) {
+            return EMPTY;
+        }
+
+        // if site is a tree
+        if (site == TREE) {
+            if ((north == BURNING) || (south == BURNING) || (east == BURNING) || (west == BURNING)) {
+                if (Math.random() < probCatchN) {
+                    return BURNING;
+                } else {
+                    return TREE;
+                }
+            }
+            return TREE;
+        }
+        return EMPTY;
+    }
+
+    public void oneStep(){
+
+        // performs a single step in the simulation
+        // calls spread for all valid locations in the grid
+        for (int r = 1; r < grid.length - 1; r++){
+            for(int c = 1; c < grid[r].length - 1; c++){
+                // spread using all direction
+                newForest[r][c] = spread(grid[r][c],grid[r-1][c],grid[r+1][c],grid[r][c+1],grid[r][c-1]);
+            }
+            grid = newForest;
+        }
+
+    }
+
+
+    public int[][] getGrid(){
+        // return the most up-to-date simulation grid (2D array)
+        return grid;
+    }
+
+    public String toString(){
+        String str = "";
+
+        for (int r = 0; r < grid.length; r++){
+            for (int c = 0; c < grid[r].length; c++){
+                str += grid[r][c] + "  ";
+            }
+            str += "\n";
+        }
+        return str;
+
+    }
+
+}
